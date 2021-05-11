@@ -12,6 +12,7 @@ jobs:
       steps:
         - name: Install Docker
           run: echo "-- Installing docker" && 
+            brew update && brew cleanup && brew cask cleanup &&
             brew cask install docker && 
             sudo docker version
             # brew install docker-machine docker &&
