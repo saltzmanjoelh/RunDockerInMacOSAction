@@ -16,8 +16,7 @@ jobs:
             mkdir -p /Users/runner/.docker/machine/cache/
             curl -o ~/.docker/machine/cache/default https://api.github.com/repos/boot2docker/boot2docker/releases/latest
             docker-machine create default
-            docker-machine env default
-            printf "printing example"
+            eval $(docker-machine env default)
             sudo docker version
   build:
 
