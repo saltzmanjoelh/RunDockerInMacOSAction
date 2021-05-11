@@ -20,16 +20,6 @@ jobs:
           brew install docker docker-machine
           docker-machine create --driver virtualbox default
           docker-machine env default
-           
-           # Wait for the server to start up, if applicable.
-           i=0
-           while ! docker system info &>/dev/null; do
-             (( i++ == 0 )) && printf %s '-- Waiting for Docker to finish starting up...' || printf '.'
-             sleep 1
-           done
-           (( i )) && printf '\n'
-           
-           echo "-- Docker is ready."
       - name: Build
         run: swift build -v
       - name: Run tests
