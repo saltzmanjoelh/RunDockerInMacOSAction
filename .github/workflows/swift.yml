@@ -26,13 +26,3 @@ jobs:
         run: |
          eval "$(docker-machine env default)"
          swift test --enable-code-coverage --sanitize=thread
-      - name: Convert coverage files
-        run: |
-          xcrun llvm-cov export -format "lcov" \
-            .build/debug/AWSDeployKitPackageTests.xctest/Contents/MacOs/AWSDeployKitPackageTests \
-            -ignore-filename-regex="\/Tests\/" \
-            -instr-profile=.build/debug/codecov/default.profdata > info.lcov
-      - name: Upload to codecov.io
-        uses: codecov/codecov-action@v1
-        with:
-          file: info.lcov
