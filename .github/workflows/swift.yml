@@ -10,14 +10,12 @@ jobs:
   install_docker:
       runs-on: macos-latest
       steps:
-        - name: echo
-          run: |
-            brew install docker-machine docker
-            mkdir -p /Users/runner/.docker/machine/cache/
-            curl -o ~/.docker/machine/cache/default https://api.github.com/repos/boot2docker/boot2docker/releases/latest
-            docker-machine create default
-            eval $(docker-machine env default)
-            sudo docker version
+        - name: Install Docker
+          run: brew install docker-machine docker &&
+            mkdir -p /Users/runner/.docker/machine/cache/  &&
+            curl -o ~/.docker/machine/cache/default https://api.github.com/repos/boot2docker/boot2docker/releases/latest  &&
+            docker-machine create default  &&
+            echo "Install done ----"
   build:
 
     runs-on: macos-latest
