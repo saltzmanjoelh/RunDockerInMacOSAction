@@ -13,6 +13,7 @@ jobs:
         - name: Install Docker
           run: echo "-- Installing docker-machine" && 
             brew install homebrew/cask/docker && 
+            open /Applications/Docker.app &&
             sudo docker version
             # brew install docker-machine docker &&
             # echo "-- Adding default config" && 
