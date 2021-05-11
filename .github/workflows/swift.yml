@@ -12,7 +12,7 @@ jobs:
       steps:
         - name: Install Docker
           run: echo "-- Installing docker-machine" && 
-            brew install docker && 
+            brew install homebrew/cask/docker && 
             sudo docker version
             # brew install docker-machine docker &&
             # echo "-- Adding default config" && 
