@@ -7,6 +7,13 @@ on:
     branches: [ main ]
 
 jobs:
+  install_docker:
+      runs-on: macos-latest
+      steps:
+        - name: echo
+          run: |
+            brew install docker-machine docker
+            sudo docker –version
   build:
 
     runs-on: macos-latest
