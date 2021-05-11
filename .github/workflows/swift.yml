@@ -12,15 +12,17 @@ jobs:
       steps:
         - name: Install Docker
           run: echo "-- Installing docker-machine" && 
-            brew install docker-machine docker &&
-            echo "-- Adding default config" && 
-            mkdir -p /Users/runner/.docker/machine/cache/  &&
-            curl -o ~/.docker/machine/cache/default https://api.github.com/repos/boot2docker/boot2docker/releases/latest  &&
-            docker-machine create default  &&
-            echo "-- Install done. Starting Docker" &&
-            eval $(docker-machine env default) && 
-            echo "-- Checking docker version" && 
+            brew install docker && 
             sudo docker version
+            # brew install docker-machine docker &&
+            # echo "-- Adding default config" && 
+            # mkdir -p /Users/runner/.docker/machine/cache/  &&
+            # curl -o ~/.docker/machine/cache/default https://api.github.com/repos/boot2docker/boot2docker/releases/latest  &&
+            # docker-machine create default  &&
+            # echo "-- Install done. Starting Docker" &&
+            # eval $(docker-machine env default) && 
+            # echo "-- Checking docker version" && 
+            # sudo docker version
   build:
 
     runs-on: macos-latest
