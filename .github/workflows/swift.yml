@@ -13,6 +13,7 @@ jobs:
         - name: echo
           run: |
             brew install docker-machine docker
+            docker-machine create default
             docker-machine start
             sudo docker version
   build:
