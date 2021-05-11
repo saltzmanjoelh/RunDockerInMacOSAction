@@ -11,6 +11,6 @@ import ShellOut
 
 class MyClassTests: XCTestCase {
     func testSomething() throws {
-        print(try shellOut(to: "which docker"))
+        print(try shellOut(to: "ls -al", arguments: ["/usr/local/bin/docker"]))
     }
 }
