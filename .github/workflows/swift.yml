@@ -11,9 +11,8 @@ jobs:
       runs-on: macos-latest
       steps:
         - name: Install Docker
-          run: echo "-- Installing docker-machine" && 
-            brew install homebrew/cask/docker && 
-            open /Applications/Docker.app &&
+          run: echo "-- Installing docker" && 
+            brew cask install docker && 
             sudo docker version
             # brew install docker-machine docker &&
             # echo "-- Adding default config" && 
