@@ -17,6 +17,8 @@ jobs:
             curl -o ~/.docker/machine/cache/default https://api.github.com/repos/boot2docker/boot2docker/releases/latest
             docker-machine create default
             docker-machine start
+            docker-machine env default
+            printf "printing example"
             sudo docker version
   build:
 
