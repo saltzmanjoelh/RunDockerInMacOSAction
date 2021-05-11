@@ -2,49 +2,54 @@ name: Swift
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
+  # Taken from https://github.com/actions/virtual-environments/issues/1143#issuecomment-652264388
   install_docker:
-      runs-on: macos-latest
-      steps:
-        - name: Install Docker
-          run: |
-          # Taken from https://github.com/actions/virtual-environments/issues/1143#issuecomment-652264388
+    runs-on: macos-latest
+    steps:
+      - name: Install docker
+        run: |
           brew install --cask docker
-          xattr -d -r com.apple.quarantine /Applications/Docker.app
-          sudo /bin/cp /Applications/Docker.app/Contents/Library/LaunchServices/com.docker.vmnetd /Library/PrivilegedHelperTools
-          sudo /bin/cp /Applications/Docker.app/Contents/Resources/com.docker.vmnetd.plist /Library/LaunchDaemons/
-          sudo /bin/chmod 544 /Library/PrivilegedHelperTools/com.docker.vmnetd
-          sudo /bin/chmod 644 /Library/LaunchDaemons/com.docker.vmnetd.plist
-          sudo /bin/launchctl load /Library/LaunchDaemons/com.docker.vmnetd.plist
-          open -g -a /Applications/Docker.app
-          i=0
-          while ! docker system info &>/dev/null; do
-            (( i++ == 0 )) && printf %s '-- Waiting for Docker to finish starting up...' || printf '.'
-            sleep 1
-          done
-          (( i )) && printf '\n'
-          echo "-- Docker is ready."
+           # allow the app to run without confirmation
+           xattr -d -r com.apple.quarantine /Applications/Docker.app
+           
+           # preemptively do docker.app's setup to avoid any gui prompts
+           sudo /bin/cp /Applications/Docker.app/Contents/Library/LaunchServices/com.docker.vmnetd /Library/PrivilegedHelperTools
+           sudo /bin/cp /Applications/Docker.app/Contents/Resources/com.docker.vmnetd.plist /Library/LaunchDaemons/
+           sudo /bin/chmod 544 /Library/PrivilegedHelperTools/com.docker.vmnetd
+           sudo /bin/chmod 644 /Library/LaunchDaemons/com.docker.vmnetd.plist
+           sudo /bin/launchctl load /Library/LaunchDaemons/com.docker.vmnetd.plist
+           open -g -a Docker.app
+           
+           # Wait for the server to start up, if applicable.
+           i=0
+           while ! docker system info &>/dev/null; do
+             (( i++ == 0 )) && printf %s '-- Waiting for Docker to finish starting up...' || printf '.'
+             sleep 1
+           done
+           (( i )) && printf '\n'
+           
+           echo "-- Docker is ready."
   build:
-
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test --enable-code-coverage --sanitize=thread
-    - name: Convert coverage files
-      run: |
-        xcrun llvm-cov export -format "lcov" \
-          .build/debug/AWSDeployKitPackageTests.xctest/Contents/MacOs/AWSDeployKitPackageTests \
-          -ignore-filename-regex="\/Tests\/" \
-          -instr-profile=.build/debug/codecov/default.profdata > info.lcov  
-    - name: Upload to codecov.io
-      uses: codecov/codecov-action@v1
-      with:
-        file: info.lcov
+      - uses: actions/checkout@v2
+      - name: Build
+        run: swift build -v
+      - name: Run tests
+        run: swift test --enable-code-coverage --sanitize=thread
+      - name: Convert coverage files
+        run: |
+          xcrun llvm-cov export -format "lcov" \
+            .build/debug/AWSDeployKitPackageTests.xctest/Contents/MacOs/AWSDeployKitPackageTests \
+            -ignore-filename-regex="\/Tests\/" \
+            -instr-profile=.build/debug/codecov/default.profdata > info.lcov
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          file: info.lcov
