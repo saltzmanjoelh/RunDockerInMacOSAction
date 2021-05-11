@@ -13,7 +13,8 @@ jobs:
         - name: echo
           run: |
             brew install docker-machine docker
-            curl -o ~/.docker/machine/cache/ https://api.github.com/repos/boot2docker/boot2docker/releases/latest
+            mkdir -p /Users/runner/.docker/machine/cache/
+            curl -o ~/.docker/machine/cache/default https://api.github.com/repos/boot2docker/boot2docker/releases/latest
             docker-machine create default
             docker-machine start
             sudo docker version
