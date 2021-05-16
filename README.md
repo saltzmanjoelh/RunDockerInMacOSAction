@@ -25,4 +25,5 @@ jobs:
 ```
 
 The `Install docker` step sets up the filesystem, uses brew to install docker-machine and starts docker-machine.
+
 The `Run tests` sets up the docker environment variables, pulls the image that we are going to use and runs the test. You want to pull the image that you will be using in the tests before running the tests because bandwidth is limited in the testing environment. You don't want your tests to run slowly while downloading the image. I have a had a race condition where I create some temp files, pull the image, continue with the test and the temp files end up being cleaned up and the test fails.
